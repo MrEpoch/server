@@ -24,6 +24,7 @@ model UserCollection {
     createdAt   DateTime       @default(now())
     user        User       @relation(fields: [belongsToId], references: [id])
     belongsToId      String
+    favourite  Boolean    @default(false)
     collectionTodos Todo[]
 }
 
@@ -31,6 +32,9 @@ model Todo {
     id           String     @id @default(uuid())
     title        String
     date         String
+    dateVerify   Decimal
+    completed    Boolean    @default(false)
+    monthYear    String
     createdAt    DateTime       @default(now())
     userCollection  UserCollection  @relation(fields: [belongsToCollectionId], references: [id])
     belongsToCollectionId  String

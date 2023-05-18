@@ -3,6 +3,18 @@ import { createJWT, hashPassword, comparePasswords } from "../modules/auth";
 
 export const createNewUser = async (req, res, next) => {
     try {
+        const userCheck = await prisma.user.findUnique({
+            where: {
+                username: req.body.username,
+            }
+        });
+
+        if (userCheck) {
+            res.status(409);
+            res.json({ message: "User already exists" });
+            return;
+        }
+
         const user = await prisma.user.create({
             data: {
                 username: req.body.username,
@@ -14,6 +26,13 @@ export const createNewUser = async (req, res, next) => {
     } catch (e) {
         e.type = "input";
         next(e);
+    } try {
+         const userCollections = await prisma.collection.create({
+            data: [],
+        });
+    } catch (e) {
+       e.type = "folderCreation";
+       next(e);
     }
 };
 
