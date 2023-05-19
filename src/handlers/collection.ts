@@ -1,7 +1,7 @@
 import prisma from "../db";
 
 
-export const readUserFolder = async (req, res, next) => {
+export const getCollections = async (req, res, next) => {
     try {
         const userFolder = await prisma.user.findUnique({
             where: {
@@ -40,12 +40,33 @@ export const createCollection = async (req, res, next) => {
            data: {
                 title: req.body.title,
                 belongsToId: req.user.id,
+                favourites: false,
            } 
         });
 
         res.json({ collection: newCollection });
     } catch (e) {
         e.type = "createCollection";
+        next(e);
+    }
+};
+
+export const updateCollection = async (req, res, next) => {
+    try {
+        const collection = await prisma.collection.update({
+            where: {
+                id: req.body.id,
+                belongsToId: req.user.id,
+            },
+            data: {
+                title: req.body.title,
+                favourites: false,
+            }
+        });
+
+        res.json({ collection: collection });
+    } catch (e) {
+        e.type = "updateCollection";
         next(e);
     }
 };
@@ -65,4 +86,5 @@ export const deleteCollection = async (req, res, next) => {
         next(e);
     }
 };
+
 

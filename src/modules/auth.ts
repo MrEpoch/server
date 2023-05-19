@@ -9,7 +9,7 @@ export const hashPassword = async (password) => {
     return await bcrypt.hash(password, 10);
 };
 
-export const createJWT = async (user) => {
+export const createJWT = async (user: any) => {
     const token = await jwt.sign(
         {
             id: user.id,
@@ -17,6 +17,7 @@ export const createJWT = async (user) => {
         },
         process.env.JWT_SECRET,
     );
+    return token;
 };
 
 export const protectRoute = (req, res, next) => {
