@@ -6,9 +6,8 @@ export const createTodo = async (req, res, next) => {
             data: {
                 title: req.body.title,
                 dateVerify: req.body.dateVerify,
-                belongsToId: req.user.id,
-                monthYear: req.body.monthYear,
-                belongsToCollectionId: req.body.collectionId,
+                belongsToCollectionId: req.body.belongsToCollectionId,
+                yearMonth: req.body.yearMonth,
                 date: req.body.date,
             }
         });
@@ -24,9 +23,7 @@ export const deleteTodo = async (req, res, next) => {
     try {
         const todo = await prisma.todo.delete({
             where: {
-                id: req.body.id,
-                belongsToId: req.user.id,
-                belongsToCollectionId: req.body.collectionId,
+                id: req.params.id,
             }
         });
 
@@ -34,22 +31,20 @@ export const deleteTodo = async (req, res, next) => {
     } catch (e) {
         e.type = "deleteTodo";
         next(e);
-    }
+   }
 };
 
 export const updateTodo = async (req, res, next) => {
     try {
         const todo = await prisma.todo.update({
             where: {
-                id: req.body.id,
-                belongsToId: req.user.id,
-                belongsToCollectionId: req.body.collectionId,
+                id: req.params.id,
             },
             data: {
                 title: req.body.title,
                 completed: req.body.completed,
                 date: req.body.date,
-                monthYear: req.body.monthYear,
+                yearMonth: req.body.monthYear,
                 dateVerify: req.body.dateVerify,
             }
         });
@@ -63,14 +58,15 @@ export const updateTodo = async (req, res, next) => {
 
 export const getCollectionTodos = async (req, res, next) => {
     try {
-        const todos = await prisma.todo.findMany({
+        const todos = await prisma.userCollection.findUnique({
             where: {
-                belongsToId: req.user.id,
-                belongsToCollectionId: req.body.collectionId,
+                id: req.body.belongsToCollectionId
+            }, include: {
+                collectionTodos: true,
             }
         });
 
-        res.json({ todos: todos });
+        res.json({ todos: todos.collectionTodos });
     } catch (e) {
         e.type = "getCollectionTodos";
         next(e);
@@ -79,10 +75,9 @@ export const getCollectionTodos = async (req, res, next) => {
 
 export const getOneTodo = async (req, res, next) => {
     try {
-        const todo = await prisma.todo.findUnique({
+        const todo = await prisma.todo.findFirst({
             where: {
-                id: req.body.id,
-                belongsToId: req.user.id,
+                id: req.params.id,
                 belongsToCollectionId: req.body.collectionId,
             }
         });

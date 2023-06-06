@@ -8,43 +8,38 @@ const router = Router();
 
 router.get("/collections", getCollections);
 
-router.get("/collection", getCollection);
+router.get("/collection/:id", getCollection);
 router.post("/collection", 
-            body('title').isString().isLength({ min: 0, max: 20}), 
-            body('id').isString(),
+            body('title').isString().isLength({ min: 1, max: 12}), 
             handleError,
     createCollection);
-router.update("/collection", 
+router.put("/collection/:id", 
             body('favourites').isBoolean(),
-            body('id').isString(),
             handleError,
     updateCollection);
-router.delete("/collection",  
-            body("id").isString(),
+router.delete("/collection/:id",  
             handleError,
     deleteCollection);
 
 router.get("/todos", getCollectionTodos);
 
-router.get("/todo", getOneTodo);
-router.post("/todo", 
-            body('title').isString().isLength({ min: 0, max: 100 }),
+router.get("/todo/:id", getOneTodo);
+router.post("/todo/", 
+            body('title').isString().isLength({ min: 0, max: 50 }),
             body('dateVerify').isNumeric(),
-            body('yearMonth').isString().isLength({ min: 0, max: 7 }),
+            body('yearMonth').isString(),
             body('date').isString(),
-            body('completed').isBoolean(),
             handleError,
     createTodo);
-router.update("/todo", 
-            body('title').isString().isLength({ min: 0, max: 100 }),
+router.put("/todo/:id", 
+            body('title').isString().isLength({ min: 0, max: 50 }),
             body('completed').isBoolean(),
             body('date').isString(),
-            body('yearMonth').isString().isLength({ min: 0, max: 7 }),
+            body('yearMonth').isString(),
             body('dateVerify').isNumeric(),
             handleError,
     updateTodo);
-router.delete("/todo", 
-            body("id").isString(),
+router.delete("/todo/:id", 
             handleError,
     deleteTodo);
 

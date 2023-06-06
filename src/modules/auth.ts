@@ -42,6 +42,7 @@ export const protectRoute = (req, res, next) => {
         req.user = user;
         next();
     } catch (e) {
+        console.log(e);
         res.status(401);
         res.send({ message: "Not authorized for connection" });
         return;

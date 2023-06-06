@@ -11,34 +11,32 @@ datasource db {
 }
 
 model User {
-    id          String     @id @default(uuid())
-    username    String     @unique
-    password    String     @unique
-    createdAt   DateTime       @default(now())
-    userCollections  UserCollection[]
+  id              String           @id @default(uuid())
+  username        String           @unique @db.VarChar(30)
+  email           String           @unique
+  password        String           @unique
+  createdAt       DateTime         @default(now())
+  userCollections UserCollection[]
 }
 
 model UserCollection {
-    id          String     @id @default(uuid())
-    title        String
-    createdAt   DateTime       @default(now())
-    user        User       @relation(fields: [belongsToId], references: [id])
-    belongsToId      String
-    favourite  Boolean    @default(false)
-    collectionTodos Todo[]
+  id              String   @id @default(uuid())
+  title           String   
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [belongsToId], references: [id])
+  belongsToId     String   
+  favourite       Boolean  @default(false)
+  collectionTodos Todo[]
 }
 
 model Todo {
-    id           String     @id @default(uuid())
-    title        String
-    date         String
-    dateVerify   Decimal
-    completed    Boolean    @default(false)
-    monthYear    String
-    createdAt    DateTime       @default(now())
-    userCollection  UserCollection  @relation(fields: [belongsToCollectionId], references: [id])
-    belongsToCollectionId  String
+  id                    String         @id @default(uuid())
+  title                 String          
+  date                  String          
+  dateVerify            Decimal        
+  completed             Boolean        @default(false)
+  yearMonth             String          
+  createdAt             DateTime       @default(now())
+  userCollection        UserCollection @relation(fields: [belongsToCollectionId], references: [id])
+  belongsToCollectionId String
 }
-
-
-

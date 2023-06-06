@@ -3,6 +3,8 @@ import router from './router';
 import cors from 'cors';
 import { createNewUser, signIn } from './handlers/user';
 import { protectRoute } from './modules/auth';
+import { body } from 'express-validator';
+import { handleError } from './modules/middlewares';
 
 const app = express();
 
@@ -11,8 +13,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.post('login', signIn);
-app.post('signup', createNewUser);
+app.post('/login', 
+    body('username').isString().isLength({ min: 0, max: 30}),
+    body('password').isString().isLength({ min: 1 })
+,handleError ,signIn);
+app.post('/signup', 
+    body('username').isString().isLength({ min: 0, max: 30}),
+    body('email').isEmail(),
+    body('password').isString().isLength({ min: 1 })
+,handleError, createNewUser);
 app.use("/api", protectRoute, router);
 
 export default app;

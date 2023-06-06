@@ -9,15 +9,26 @@ export const createNewUser = async (req, res, next) => {
             }
         });
 
-        if (userCheck) {
+        const emailCheck = await prisma.user.findUnique({
+            where: {
+                email: req.body.email,
+            }
+        });
+
+        if (emailCheck) {
             res.status(409);
-            res.json({ message: "User already exists" });
+            res.json({ message: "Username already exists" });
+            return;
+        } else if (userCheck) {
+            res.status(409);
+            res.json({ message: "Email already exists" });
             return;
         }
 
         const user = await prisma.user.create({
             data: {
                 username: req.body.username,
+                email: req.body.email,
                 password: await hashPassword(req.body.password),
             }
         });
@@ -26,14 +37,7 @@ export const createNewUser = async (req, res, next) => {
     } catch (e) {
         e.type = "signUp";
         next(e);
-    } try {
-         const userCollections = await prisma.collection.create({
-            data: [],
-        });
-    } catch (e) {
-       e.type = "folderCreation";
-       next(e);
-    }
+    } 
 };
 
 export const signIn = async (req, res, next) => {
@@ -41,6 +45,7 @@ export const signIn = async (req, res, next) => {
         const user = await prisma.user.findUnique({
             where: {
                 username: req.body.username,
+                email: req.body.email,
             }
         });
 

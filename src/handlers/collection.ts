@@ -5,8 +5,8 @@ export const getCollections = async (req, res, next) => {
     try {
         const userFolder = await prisma.user.findUnique({
             where: {
-                id: req.body.id,
-            },
+                id: req.user.id,
+            }, 
             include: {
                 userCollections: true,
             }
@@ -20,10 +20,9 @@ export const getCollections = async (req, res, next) => {
 
 export const getCollection = async (req, res, next) => {
     try {
-        const collection = await prisma.collection.findUnique({
+        const collection = await prisma.userCollection.findUnique({
             where: {
-                id: req.body.id,
-                belongsToId: req.user.id,
+                id: req.params.id,
             },
         });
 
@@ -36,11 +35,10 @@ export const getCollection = async (req, res, next) => {
 
 export const createCollection = async (req, res, next) => {
     try {
-        const newCollection = await prisma.collection.create({
+        const newCollection = await prisma.userCollection.create({
            data: {
                 title: req.body.title,
                 belongsToId: req.user.id,
-                favourites: false,
            } 
         });
 
@@ -53,14 +51,12 @@ export const createCollection = async (req, res, next) => {
 
 export const updateCollection = async (req, res, next) => {
     try {
-        const collection = await prisma.collection.update({
+        const collection = await prisma.userCollection.update({
             where: {
-                id: req.body.id,
-                belongsToId: req.user.id,
+                id: req.params.id,
             },
             data: {
                 title: req.body.title,
-                favourites: false,
             }
         });
 
@@ -73,10 +69,9 @@ export const updateCollection = async (req, res, next) => {
 
 export const deleteCollection = async (req, res, next) => {
     try {
-        const collection = await prisma.collection.delete({
+        const collection = await prisma.userCollection.delete({
             where: {
                 id: req.body.id,
-                belongsToId: req.user.id
             },
         });
 
