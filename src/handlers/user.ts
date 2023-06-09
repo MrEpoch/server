@@ -17,11 +17,11 @@ export const createNewUser = async (req, res, next) => {
 
         if (emailCheck) {
             res.status(409);
-            res.json({ message: "Username already exists" });
+            res.json({ message: "Email already exists" });
             return;
         } else if (userCheck) {
             res.status(409);
-            res.json({ message: "Email already exists" });
+            res.json({ message: "Username already exists" });
             return;
         }
 
@@ -44,10 +44,15 @@ export const signIn = async (req, res, next) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
-                username: req.body.username,
                 email: req.body.email,
             }
         });
+
+        if (!user) {
+            res.status(401);
+            res.json({ message: "Invalid email" });
+            return;
+        }
 
         const isValid = await comparePasswords(req.body.password, user.password);
 

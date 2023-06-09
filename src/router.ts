@@ -21,7 +21,7 @@ router.delete("/collection/:id",
             handleError,
     deleteCollection);
 
-router.get("/todos", getCollectionTodos);
+router.get("/todos/:id", getCollectionTodos);
 
 router.get("/todo/:id", getOneTodo);
 router.post("/todo/", 

@@ -60,7 +60,7 @@ export const getCollectionTodos = async (req, res, next) => {
     try {
         const todos = await prisma.userCollection.findUnique({
             where: {
-                id: req.body.belongsToCollectionId
+                id: req.params.id
             }, include: {
                 collectionTodos: true,
             }
@@ -75,10 +75,9 @@ export const getCollectionTodos = async (req, res, next) => {
 
 export const getOneTodo = async (req, res, next) => {
     try {
-        const todo = await prisma.todo.findFirst({
+        const todo = await prisma.todo.findUnique({
             where: {
                 id: req.params.id,
-                belongsToCollectionId: req.body.collectionId,
             }
         });
 
