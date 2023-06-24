@@ -74,17 +74,22 @@ export const updateCollection = async (req, res, next) => {
 
 export const deleteCollection = async (req, res, next) => {
     try {
+        console.log(req.params.id);
+        await prisma.todo.deleteMany({
+            where: {
+                belongsToCollectionId: req.params.id,
+            }
+        });
         const collection = await prisma.userCollection.delete({
             where: {
-                id: req.params.id,
-            },
+                id: req.params.id, 
+            }
         });
 
-        req.json({ deleted: collection });
+        res.json({ deleted: collection });
     } catch (e) {
         e.type = "deleteCollection";
         next(e);
     }
 };
-
 

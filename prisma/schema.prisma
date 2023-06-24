@@ -23,10 +23,12 @@ model UserCollection {
   id              String   @id @default(uuid())
   title           String   
   createdAt       DateTime @default(now())
-  user            User     @relation(fields: [belongsToId], references: [id])
+  user            User     @relation(fields: [belongsToId], references: [id], onDelete: Cascade)
   belongsToId     String   
   favourite       Boolean  @default(false)
   collectionTodos Todo[]
+
+    @@unique([belongsToId, id])
 }
 
 model Todo {
@@ -39,4 +41,6 @@ model Todo {
   createdAt             DateTime       @default(now())
   userCollection        UserCollection @relation(fields: [belongsToCollectionId], references: [id])
   belongsToCollectionId String
+
+  @@unique([belongsToCollectionId, id])
 }

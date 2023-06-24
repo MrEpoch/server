@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var collection_1 = require("./handlers/collection");
+var todo_1 = require("./handlers/todo");
+var express_validator_1 = require("express-validator");
+var middlewares_1 = require("./modules/middlewares");
+var router = (0, express_1.Router)();
+router.get("/collections", collection_1.getCollections);
+router.get("/collection/:id", collection_1.getCollection);
+router.post("/collection", (0, express_validator_1.body)('title').isString().isLength({ min: 1, max: 12 }), middlewares_1.handleError, collection_1.createCollection);
+router.put("/collection/:id", (0, express_validator_1.body)('favourite').isBoolean(), middlewares_1.handleError, collection_1.updateCollection);
+router.delete("/collection/:id", middlewares_1.handleError, collection_1.deleteCollection);
+router.get("/todos/:id", todo_1.getCollectionTodos);
+router.get("/todo/:id", todo_1.getOneTodo);
+router.post("/todo/", (0, express_validator_1.body)('title').isString().isLength({ min: 0, max: 50 }), (0, express_validator_1.body)('dateVerify').isNumeric(), (0, express_validator_1.body)('yearMonth').isString(), (0, express_validator_1.body)('date').isString(), middlewares_1.handleError, todo_1.createTodo);
+router.put("/todo/:id", (0, express_validator_1.body)('title').isString().isLength({ min: 0, max: 50 }), (0, express_validator_1.body)('completed').isBoolean(), (0, express_validator_1.body)('date').isString(), (0, express_validator_1.body)('yearMonth').isString(), (0, express_validator_1.body)('dateVerify').isNumeric(), middlewares_1.handleError, todo_1.updateTodo);
+router.delete("/todo/:id", middlewares_1.handleError, todo_1.deleteTodo);
+exports.default = router;
+//# sourceMappingURL=router.js.map

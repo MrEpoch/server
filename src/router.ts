@@ -14,7 +14,7 @@ router.post("/collection",
             handleError,
     createCollection);
 router.put("/collection/:id", 
-            body('favourites').isBoolean(),
+            body('favourite').isBoolean(),
             handleError,
     updateCollection);
 router.delete("/collection/:id",  
