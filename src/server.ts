@@ -14,12 +14,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-
-app.post('/login', 
+app.post('/public/login', 
     body('username').isString().isLength({ min: 0, max: 30}),
     body('password').isString().isLength({ min: 1 })
 ,handleError ,signIn);
-app.post('/signup', 
+app.post('/public/signup', 
     body('username').isString().isLength({ min: 0, max: 30}),
     body('email').isEmail(),
     body('password').isString().isLength({ min: 1 })
