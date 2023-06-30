@@ -14,15 +14,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.post('/public/login', 
+app.post('/server/login', 
     body('username').isString().isLength({ min: 0, max: 30}),
     body('password').isString().isLength({ min: 1 })
 ,handleError ,signIn);
-app.post('/public/signup', 
+app.post('/server/signup', 
     body('username').isString().isLength({ min: 0, max: 30}),
     body('email').isEmail(),
     body('password').isString().isLength({ min: 1 })
 ,handleError, createNewUser);
-app.use("/api", protectRoute, router);
+app.use("/server/api", protectRoute, router);
 
 export default app;
